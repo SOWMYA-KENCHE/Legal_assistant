@@ -39,9 +39,3 @@ A Retrieval-Augmented Generation (RAG) assistant for legal document analysis and
    streamlit run app.py
    ```
 
-## Final Project UI
-
-Below is a screenshot of the Legal RAG Assistant interface:
-
-![Legal RAG Assistant UI]
-<img width="934" alt="Screenshot 2025-06-17 195327" src="https://github.com/user-attachments/assets/3eabb1ac-625c-4ee0-97fb-b6e3d970538d" />
