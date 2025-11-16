@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> LEXI LAW</title>
+  <link rel="stylesheet" href="style.css" />
+  <link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    
+  />
+</head>
+<body>
+  <!-- 🔐 AUTH PAGE -->
+  <div id="auth-page" class="page">
+    <div class="auth-container">
+      <i class="fas fa-gavel auth-icon"></i>
+      <h1>LexiLaw Legal Assistant</h1>
+
+      <!-- Login -->  
+      <form id="login-form" class="auth-form">
+        <h2>Login</h2>
+        <div id="login-error" class="error-message"></div>
+        <div class="input-group">
+          <label for="login-username">Email</label>
+          <input type="text" id="login-username" required />
+        </div>
+        <div class="input-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" required />
+        </div>
+        <button type="submit" class="btn btn-primary">
+          <span class="btn-text">Login</span>
+          <i class="fas fa-spinner fa-spin loading-icon"></i>
+        </button>
+      </form>
+
+      <!-- Sign Up -->
+      <form id="signup-form" class="auth-form" style="display: none;">
+        <h2>Sign Up</h2>
+        <div id="signup-message" class="message"></div>
+        <div class="input-group">
+          <label for="signup-username">Email</label>
+          <input type="text" id="signup-username" required />
+        </div>
+        <div class="input-group">
+          <label for="signup-password">Password</label>
+          <input type="password" id="signup-password" required />
+        </div>
+        <button type="submit" class="btn btn-primary">
+          <span class="btn-text">Sign Up</span>
+          <i class="fas fa-spinner fa-spin loading-icon"></i>
+        </button>
+      </form>
+
+      <p class="toggle-link">
+        <a href="#" id="show-signup">Don’t have an account? Sign Up</a>
+        <a href="#" id="show-login" style="display: none;">Already have an account? Login</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- 💬 MAIN APP -->
+  <div id="app-page" class="page" style="display: none;">
+    <aside id="sidebar">
+      <div class="sidebar-header">
+        <h2 id="welcome-message">Welcome!</h2>
+        <button id="logout-button" class="btn btn-secondary">Logout</button>
+      </div>
+
+      <div class="sidebar-content">
+        <!-- PDF Upload -->
+        <h3><i class="fas fa-upload"></i> Upload Document</h3>
+        <p>Upload a PDF to analyze.</p>
+        <input type="file" id="file-uploader" accept=".pdf" style="display: none;" />
+        <button id="upload-button" class="btn btn-primary">
+          <span class="btn-text">Upload PDF</span>
+          <i class="fas fa-spinner fa-spin loading-icon"></i>
+        </button>
+        <div id="upload-status" class="status-message info">
+          <i class="fas fa-info-circle"></i> No PDF uploaded.
+        </div>
+
+        <div id="summary-container" class="expander" style="display: none;">
+          <button class="expander-header">
+            <h3><i class="fas fa-file-alt"></i> Document Summary</h3>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="expander-content">
+            <p id="summary-text"></p>
+          </div>
+        </div>
+
+         <hr class="divider" />
+
+      <!-- FIND LAWYERS - Option A (mini map + search + big popup map) -->
+      <div class="expander" id="lawyer-expander">
+  <button class="expander-header">
+    <h3><i class="fas fa-map-marker-alt"></i> Find Nearby Lawyers</h3>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+
+  <div class="expander-content">
+
+    <input
+      type="text"
+      id="lawyer-search-input"
+      placeholder="Enter city, area, or pincode"
+      class="lawyer-input"
+    />
+
+    <button id="search-lawyer-btn" class="lawyer-btn">
+  <i class="fas fa-search-location"></i> Search Lawyers
+</button>
+
+
+  </div>
+</div>
+<hr class="divider" />
+
+        <!-- Precedent Search -->
+        <h3><i class="fas fa-search"></i> Find Precedents</h3>
+        <button id="precedent-button" class="btn btn-secondary">
+          <span class="btn-text">Find Precedents</span>
+          <i class="fas fa-spinner fa-spin loading-icon"></i>
+        </button>
+        <div id="precedent-container" class="expander" style="display: none;">
+          <button class="expander-header">
+            <h3><i class="fas fa-book-reader"></i> Precedents</h3>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="expander-content">
+            <pre id="precedent-text"></pre>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- 🧾 Fact Check History -->
+        <h3><i class="fas fa-clipboard-check"></i> Fact Check History</h3>
+        <button id="fact-history-button" class="btn btn-secondary">
+          <span class="btn-text">View Fact Checks</span>
+          <i class="fas fa-spinner fa-spin loading-icon"></i>
+        </button>
+
+        <div id="fact-history-container" class="expander" style="display: none;">
+          <button class="expander-header">
+            <h3><i class="fas fa-list"></i> Verified Facts</h3>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="expander-content">
+            <div id="fact-history-content"></div>
+          </div>
+        </div>
+      </div>
+      
+
+      <div id="app-error" class="error-message"></div>
+    </aside>
+
+    <main id="chat-container">
+      <div id="chat-messages"></div>
+
+
+      <form id="chat-form">
+        <input
+          type="text"
+          id="chat-input"
+          placeholder="Ask a question..."
+          autocomplete="off"
+        />
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </form>
+    </main>
+  </div>
+
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>
+
+
+
+
